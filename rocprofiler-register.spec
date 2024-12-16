@@ -8,6 +8,7 @@ License:	MIT
 Group:		Development/Tools
 BuildRequires:	cmake
 BuildSystem:	cmake
+BuildRequires:	git-core
 BuildRequires:	stdc++-static-devel
 
 %patchlist
