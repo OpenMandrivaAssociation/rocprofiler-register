@@ -8,6 +8,7 @@ License:	MIT
 Group:		Development/Tools
 BuildRequires:	cmake
 BuildSystem:	cmake
+BuildRequires:	stdc++-static-devel
 
 %patchlist
 rocprofiler-register-lib64.patch
@@ -34,7 +35,6 @@ features it wants to use (e.g. API tracing, kernel dispatch timing), etc.
 
 %prep
 %autosetup -p1 -n %{name}-rocm-%{version}
-git init
 
 %files
 %{_includedir}/rocprofiler-register
