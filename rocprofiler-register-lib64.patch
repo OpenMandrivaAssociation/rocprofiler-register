@@ -1,0 +1,13 @@
+diff -up rocprofiler-register-rocm-6.3.0/CMakeLists.txt.omv~ rocprofiler-register-rocm-6.3.0/CMakeLists.txt
+--- rocprofiler-register-rocm-6.3.0/CMakeLists.txt.omv~	2024-12-16 01:29:20.366435220 +0100
++++ rocprofiler-register-rocm-6.3.0/CMakeLists.txt	2024-12-16 01:29:33.921908177 +0100
+@@ -78,7 +78,8 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_D
+ include(GNUInstallDirs) # install directories
+ 
+ # ROCm does not use lib64
+-set(CMAKE_INSTALL_LIBDIR "lib")
++# Except when it does ;)
++#set(CMAKE_INSTALL_LIBDIR "lib")
+ 
+ include(rocprofiler_register_utilities) # various functions/macros
+ include(rocprofiler_register_interfaces) # interface libraries

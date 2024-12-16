@@ -9,6 +9,9 @@ Group:		Development/Tools
 BuildRequires:	cmake
 BuildSystem:	cmake
 
+%patchlist
+rocprofiler-register-lib64.patch
+
 %description
 The rocprofiler-register library is a helper library that coordinates the
 modification of the intercept API table(s) of the HSA/HIP/ROCTx runtime
@@ -35,8 +38,8 @@ git init
 
 %files
 %{_includedir}/rocprofiler-register
-%{_prefix}/lib/cmake/rocprofiler-register
-%{_prefix}/lib/librocprofiler-register.so*
+%{_libdir}/cmake/rocprofiler-register
+%{_libdir}/librocprofiler-register.so*
 %doc %{_docdir}/rocprofiler-register
 %{_datadir}/modulefiles
 %{_datadir}/rocprofiler-register
