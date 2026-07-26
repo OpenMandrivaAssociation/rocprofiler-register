@@ -1,46 +1,69 @@
 Name:		rocprofiler-register
-Version:	6.3.0
+Version:	7.14.0
 Release:	1
-Source0:	rocprofiler-register-%{version}.tar.xz
+# Upstream library version
+%global libver 0.6.0
 Summary:	Helper library for modifying API tables of the ROCprofiler library
-URL:		https://github.com/ROCm/rocprofiler-register
 License:	MIT
-Group:		Development/Tools
-BuildRequires:	cmake
-BuildSystem:	cmake
-BuildRequires:	git-core
-BuildRequires:	stdc++-static-devel
+Group:		System/Libraries
+URL:		https://github.com/ROCm/rocprofiler-register
+Source0:	https://github.com/ROCm/rocm-systems/releases/download/therock-7.14/rocprofiler-register.tar.gz#/rocprofiler-register-%{version}.tar.gz
 
-%patchlist
-rocprofiler-register-lib64.patch
+BuildRequires:	rocm-rpm-macros
+BuildRequires:	cmake
+BuildRequires:	ninja
+BuildRequires:	cmake(fmt)
+BuildRequires:	cmake(glog)
+# ng-log provides glog::glog for compatibility
+BuildRequires:	lib64ng-log-devel
+BuildRequires:	lib64fmt-devel
+BuildRequires:	stdc++-static-devel
+BuildRequires:	git-core
+
+ExclusiveArch:	%{x86_64} %{aarch64}
 
 %description
-The rocprofiler-register library is a helper library that coordinates the
-modification of the intercept API table(s) of the HSA/HIP/ROCTx runtime
-libraries by the ROCprofiler (v2) library. The purpose of this library is to
-provide a consistent and automated mechanism of enabling performance analysis
-in the ROCm runtimes which does not rely on environment variables or unique
-methods for each runtime library.
+The rocprofiler-register library coordinates modification of the intercept
+API table(s) of the HSA/HIP/ROCTx runtime libraries by ROCprofiler.
 
-When a runtime is initialized (either explicitly and lazily) and the intercept
-API table is constructed, it passes this API table to rocprofiler-register.
-Rocprofiler-register scans the symbols in the address space and if it detects
-there is at least one visible symbol named rocprofiler_configure (which is a
-function provided by tools), it passes the intercept API table to the
-rocprofiler library (dlopening the rocprofiler library if it is not already
-loaded). The rocprofiler library then does an extensive scan for all the
-instances of the rocprofiler_configure symbols and invokes each of them.
-The rocprofiler_configure function (again, provided by a tool) returns
-effectively tells rocprofiler which behaviors it wants to be notified about,
-features it wants to use (e.g. API tracing, kernel dispatch timing), etc.
+%package devel
+Summary:	Development files for %{name}
+Group:		Development/C
+Requires:	%{name}%{?_isa} = %{version}-%{release}
+
+%description devel
+Headers and CMake package for rocprofiler-register.
 
 %prep
-%autosetup -p1 -n %{name}-rocm-%{version}
+%autosetup -n rocprofiler-register -p1
+# Upstream hardcodes lib/ (ROCm non-FHS); force multi-lib libdir
+sed -i -e 's|set(CMAKE_INSTALL_LIBDIR "lib")|set(CMAKE_INSTALL_LIBDIR "%{_lib}")|' CMakeLists.txt
+
+%cmake \
+	-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+	-DROCPROFILER_REGISTER_BUILD_GLOG=OFF \
+	-DROCPROFILER_REGISTER_BUILD_FMT=OFF \
+	-DROCPROFILER_REGISTER_BUILD_TESTS=OFF \
+	-DROCPROFILER_REGISTER_BUILD_SAMPLES=OFF \
+	-G Ninja
+
+%build
+%ninja_build -C build
+
+%install
+%ninja_install -C build
 
 %files
-%{_includedir}/rocprofiler-register
-%{_libdir}/cmake/rocprofiler-register
-%{_libdir}/librocprofiler-register.so*
-%doc %{_docdir}/rocprofiler-register
-%{_datadir}/modulefiles
-%{_datadir}/rocprofiler-register
+%license LICENSE.md
+%doc README.md
+%exclude %{_docdir}/rocprofiler-register/LICENSE.md
+%{_libdir}/librocprofiler-register.so.%{libver}
+%{_libdir}/librocprofiler-register.so.0
+%{_datadir}/modulefiles/rocprofiler-register/
+%{_datadir}/rocprofiler-register/setup-env.sh
+%exclude %{_datadir}/rocprofiler-register/tests
+
+%files devel
+%{_includedir}/rocprofiler-register/
+%{_libdir}/librocprofiler-register.so
+%{_libdir}/cmake/rocprofiler-register/
