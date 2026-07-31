@@ -1,6 +1,6 @@
 Name:		rocprofiler-register
 Version:	7.14.0
-Release:	1
+Release:	2
 # Upstream library version
 %global libver 0.6.0
 Summary:	Helper library for modifying API tables of the ROCprofiler library
@@ -19,8 +19,6 @@ BuildRequires:	lib64ng-log-devel
 BuildRequires:	lib64fmt-devel
 BuildRequires:	stdc++-static-devel
 BuildRequires:	git-core
-
-ExclusiveArch:	%{x86_64} %{aarch64}
 
 %description
 The rocprofiler-register library coordinates modification of the intercept
