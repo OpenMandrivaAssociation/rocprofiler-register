@@ -1,13 +1,13 @@
 Name:		rocprofiler-register
-Version:	7.14.0
-Release:	2
+Version:	10.0.0
+Release:	1
 # Upstream library version
 %global libver 0.6.0
 Summary:	Helper library for modifying API tables of the ROCprofiler library
 License:	MIT
 Group:		System/Libraries
 URL:		https://github.com/ROCm/rocprofiler-register
-Source0:	https://github.com/ROCm/rocm-systems/releases/download/therock-7.14/rocprofiler-register.tar.gz#/rocprofiler-register-%{version}.tar.gz
+Source0:	https://github.com/ROCm/rocm-systems/releases/download/therock-10.0/rocprofiler-register.tar.gz#/rocprofiler-register-%{version}.tar.gz
 
 BuildRequires:	rocm-rpm-macros
 BuildRequires:	cmake
