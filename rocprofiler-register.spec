@@ -1,6 +1,6 @@
 Name:		rocprofiler-register
 Version:	10.0.0
-Release:	1
+Release:	2
 # Upstream library version
 %global libver 0.6.0
 Summary:	Helper library for modifying API tables of the ROCprofiler library
